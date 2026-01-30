@@ -1,6 +1,6 @@
 # The URL the site will be built for
-base_url = "https://verenagd.github.io/Fast-Robots/"
-
+base_url = "https://verenagd.github.io/Fast-Robots"
+theme = "duckquill"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
