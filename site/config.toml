@@ -1,16 +1,35 @@
-# The URL the site will be built for
-base_url = "https://verenagd.github.io/Fast-Robots"
+base_url = "https://verenagd.github.io/Fast-Robots/"
+title = "Fast Robots"
+description = "Fast Robots blog"
+
 theme = "duckquill"
-# Whether to automatically compile all Sass files in the sass directory
+
 compile_sass = true
-
-# Whether to build a search index to be used later on by a JavaScript library
-build_search_index = true
-
-[markdown]
-
-[markdown.highlighting]
-theme = "duckquill"
+minify_html = true
+generate_feeds = false
+#feed_filenames = ["rss.xml", "atom.xml"]
 
 [extra]
-# Put all your custom variables here
+default_theme = "light"
+accent_color = "#b48cff"        # light purple
+accent_color_dark = "#9d7ae8"
+
+[extra.nav]
+show_feed = false
+show_theme_switcher = true
+show_repo = false
+links = [
+  { name = "Labs", menu = [
+  { url = "@/Lab_1.md", name = "Lab 1" },
+  { url = "@/Lab_2.md", name = "Lab 2" }
+  ] },
+  { url = "@/about.md", name = "About" },
+
+]
+
+
+
+
+
+
+
