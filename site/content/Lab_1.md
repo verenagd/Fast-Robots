@@ -10,23 +10,33 @@ In this prelab I connected the Redboard Artemis Nano Board to Arduino IDE, made 
 
 
 
-
 ### Lab Tasks
 
 The tasks for this lab includes running a series of the examples found within libraries in order to test the set-up. The following examples were run:
 
 1. Setting up Artemis to computer & selecting correct board and port.
+
 2. 0.1 Basics - Blink
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/OAZmKroaMOA?si=bIk5_WhDwhwj8Akd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+<iframe width="500" height="315" src="https://www.youtube.com/embed/OAZmKroaMOA?si=bIk5_WhDwhwj8Akd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 3. Apollo3 - Example4_Serial
+
+<iframe width="500" height="315" src="https://www.youtube.com/embed/qpBVUXcWttI?si=2745-EkR0QmK3jj-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 4. Apollo3 - Example2_analogRead
+
+<iframe width="500" height="315" src="https://www.youtube.com/embed/6CNi2HTRS94?si=WvlwywNFZR0sNv20" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Unfortunately, my hands were not necessarily warm enough for the temperature sensor to drastically change in time. 
+
 5. PDM - Example1_MicrophoneOutput
+<iframe width="500" height="315" src="https://www.youtube.com/embed/LsgwR3YDnJA?si=0MgB581qZN17y5KK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 6. The additional task that I undertook for the MAE 5190 course, was to generate a simplified electronic tuner that detected three frequencies of my choice. I choose to detect the notes A4, A5, and F4. I added the following code to the MicrophoneOutput example code, and added a tolerance of about +/- 10 Hz for each note.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kxCqaYG7Tkw?si=ThR00wxrvCGnUW8w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ```c++
  ui32LoudestFrequency = (sampleFreq * ui32MaxIndex) / pdmDataBufferSize;
@@ -58,29 +68,41 @@ The tasks for this lab includes running a series of the examples found within li
 ## Lab1B
 
 ### Prelab
-
+#### Configuration & Codebase
 This prelab consisted of me having to uninstall Python 3.14, installing Python 3.13, creating the virtual environment FastRobots_ble, downloading the codebase into my directory, and starting the Jupyter server. This was all done in order to support Artemis through Bluetooth Low Energy (BLE).
 
-I ran the following lines of code to activate the Jupyter server:
+
+I ran the following lines of code to create and run the virtual environment:
+```Windows Command Prompt
+python3 -m pip install --user virtualenv
+python3 -m venv FastRobots_ble
+.\FastRobots_ble\Scripts\activate
+```
+
+... and to activate the Jupyter server:
 ```Windows Command Prompt
 cd C:\Users\veren\FastRobots
 .\FastRobots_ble\Scripts\activate
 jupyter lab
 ```
 
+Under the connections.yaml file I added the board's MAC address that was printed in the Arduino's Serial Monitor, and updated its Universally Unique Identifier (UUID) that I got from running the following lines.
 
-AAA Under the connections.yaml file I added the board' MAC address that was printed in the Arduino's Serial Monitor, and updated its Universally Unique Identifier (UUID) that I got from running the following lines.
+<img src="/Fast-Robots/macaddress.png" alt="About Photo" width="300">
+
 
 ```python
 from uuid import uuid4
 uuid4
 ```
-![ConnectJup](ConnectJup.png)
+
+
+The codebase contains a select number of files that are edited on different interfaces, but complement each other to run the system. The .ino file(s) is where the c++ code is written and is burned onto the board via Arduino IDE and a wired connection. We use Jupyter Notebook to edit the python files on which we write the code that interacts with and controls the firmware that has already been burned onto the device, via Arduino Bluetooth Low Energy capabilities. 
 
 
 ### Lab Tasks
 
-The following are the tasks that were prompted for this section of the lab once the bluetooth and wired connection were running.
+The following are the tasks that were prompted for this section of the lab once everything was set-up and ready to go.
 
 1. Send a string value from the computer to the Artemis board using the ECHO command. The computer should then receive and print an augmented string.
 
@@ -273,9 +295,55 @@ case GET_TEMP_READINGS: {
 Jupyter Lab Code:
 ![tempread](tempread.png)
 
-
-
 8. Discuss the differences between these two methods, the advantages and disadvantages of both and the potential scenarios that you might choose one method over the other. How “quickly” can the second method record data? The Artemis board has 384 kB of RAM. Approximately how much data can you store to send without running out of memory?
 
+The method implemented in Task 6 uses less memory and bandwidth, compared to the method used in Task 7 that requires more memory and longer transmission time. If each sample uses about 4 bytes for a timestamp and a temperature value, then 
+
+
+Extra Tasks for MAE 5190
+
+9. 
+
+
+Arduino Code:
+```c++
+case DATA_RATE_REPLY:{
+    currentMillis = millis();
+    char byte_arr[MAX_MSG_SIZE];
+    success = robot_cmd.get_next_value(byte_arr);
+    if (!success)
+    return;
+    
+    int x = atoi(byte_arr);
+    tx_estring_value.clear();
+    tx_estring_value.append("Received time: ");
+    tx_estring_value.append(String(currentMillis).c_str());
+    tx_estring_value.append("\n");
+    tx_estring_value.append("Message: ");
+    for (int i=0; i<x; i++){
+    tx_estring_value.append("1"); 
+    Serial.println(x);
+    }
+    tx_estring_value.append("\n");
+    currentMillis = millis();
+    tx_estring_value.append("Time sent: ");
+    tx_estring_value.append(String(currentMillis).c_str());
+
+    tx_characteristic_string.writeValue(tx_estring_value.c_str());
+    
+    break;  
+}
+```
+
+Jupyter Lab Code:
+![datarate](datarate.png)
+
+
+10. Reliability: What happens when you send data at a higher rate from the robot to the computer? Does the computer read all the data published (without missing anything) from the Artemis board? Include your answer in the write-up.
 
 ### Discussion
+
+
+### Resources & Collaborations
+
+In order to accustom myself to the different platforms that we're using, understand the architecture of our system, and for help on specific commands and syntax I referenced Jack Long and Trevor Dales' sites. I also used ChatGPT mainly for debugging and syntax issues that I would run into.
