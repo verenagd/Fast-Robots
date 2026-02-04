@@ -1,0 +1,54 @@
+/* ===== Code block with full-width top bar ===== */
+
+pre {
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 52px 18px 18px; /* space for top bar */
+  overflow: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* remove inner backgrounds */
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* ===== full-width header bar ===== */
+pre code[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 40px;
+  display: flex;
+  align-items: center;
+
+  padding-left: 16px;
+
+  background: #d6c5fb; /* slightly darker orange */
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.65);
+
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+/* scrollbar like the orange one */
+pre::-webkit-scrollbar {
+  height: 10px;
+}
+pre::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(0,0,0,0.2);
+}
+pre::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.06);
+}

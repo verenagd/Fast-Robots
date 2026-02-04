@@ -9,11 +9,14 @@ minify_html = true
 generate_feeds = false
 #feed_filenames = ["rss.xml", "atom.xml"]
 
+
 [extra]
 default_theme = "light"
 accent_color = "#b48cff"        # light purple
 accent_color_dark = "#9d7ae8"
 emoji_favicon = "🚀✨"
+styles = ["custom.css"]
+
 
 [extra.nav]
 show_feed = false
