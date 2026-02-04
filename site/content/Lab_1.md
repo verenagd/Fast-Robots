@@ -336,12 +336,31 @@ Jupyter Lab Code:
 Data rate for 5-byte replies: ~40,000 bytes/s
 Data rate for 120-byte replies: ~13,150 bytes/s
 
-Short packets do introduce a lot of overhead, and large replies can reduce overhead. However, once the reply is bigger than what fits in a notification, it must be split up into multiple packets, introducing much overhead and affect throughput.
+Short packets do introduce a lot of overhead, and large replies can reduce overhead. However, once the reply is bigger than what fits in a notification, it must be split up into multiple packets, introducing much overhead and affect throughput. The measured data rate does not scale linearly with payload size. This is due to fixed BLE packet overhead and the fact that timestamps are recorded on unsynchronized clocks, introducing timing error. The graph below still demonstrates that many small packets incur significant overhead, and increasing packet size provides diminishing returns once fragmentation occurs.
 
 
-10. Reliability: What happens when you send data at a higher rate from the robot to the computer? Does the computer read all the data published (without missing anything) from the Artemis board? Include your answer in the write-up.
+After running the DATA_RATE_REPLY case that I made five times, I graphed this chart.
+```python
+import matplotlib.pyplot as plt
+sizes = [5, 50, 100, 120, 150]              # bytes
+time_sent = [174288, 176767, 178003, 179051, 180034]      # ms
+time_received = [174287, 176748, 177949, 178974, 179929]  # ms
 
-### Discussion
+delays = [(r - s)/1000 for r, s in zip(time_received, time_sent)]
+data_rates = [size / d for size, d in zip(sizes, delays)]  # bytes/sec
+
+# Plot
+plt.plot(sizes, data_rates, marker='o')
+plt.xlabel("Reply size (bytes)")
+plt.ylabel("Data rate (bytes/sec)")
+plt.title("BLE Data Rate vs. Reply Size")
+plt.grid(True)
+plt.show()
+```
+<img src="/Fast-Robots/datarate.png">
+
+
+10. At high enough reansmission rates, the computer cannot receive every single packet that is published by the Artemis board, leading to significant loss in data. This is because BLE has limited bandwidth, and pack can get lost if notifications are produced faster than they can be transmitted and processed.
 
 
 ### Resources & Collaborations
