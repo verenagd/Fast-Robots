@@ -88,7 +88,7 @@ jupyter lab
 
 Under the connections.yaml file I added the board's MAC address that was printed in the Arduino's Serial Monitor, and updated its Universally Unique Identifier (UUID) that I got from running the following lines.
 
-<img src="/Fast-Robots/macaddress.png" alt="About Photo" width="300">
+<img src="/Fast-Robots/macaddress.png" alt="About Photo">
 
 
 ```python
