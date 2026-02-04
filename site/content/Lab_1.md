@@ -18,15 +18,9 @@ The tasks for this lab includes running a series of the examples found within li
 1. Setting up Artemis to computer & selecting correct board and port.
 2. 0.1 Basics - Blink
 
-<iframe
-  width="100%"
-  height="400"
-  src="https://youtu.be/OAZmKroaMOA"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OAZmKroaMOA?si=bIk5_WhDwhwj8Akd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
 
 3. Apollo3 - Example4_Serial
 4. Apollo3 - Example2_analogRead
