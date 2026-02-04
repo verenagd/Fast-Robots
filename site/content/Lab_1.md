@@ -86,7 +86,7 @@ cd C:\Users\veren\FastRobots
 jupyter lab
 ```
 
-Under the connections.yaml file I added the board's MAC address that was printed in the Arduino's Serial Monitor, and updated its Universally Unique Identifier (UUID) that I got from running the following lines.
+Under the connections.yaml file I added the board's MAC address that was printed in the Arduino's Serial Monitor,  updated its Universally Unique Identifier (UUID) that I got from running the following lines in both the Arduino and yaml files, and connected via BLE.
 
 <img src="/Fast-Robots/macaddress.png">
 
@@ -94,6 +94,7 @@ Under the connections.yaml file I added the board's MAC address that was printed
 from uuid import uuid4
 uuid4
 ```
+<img src="/Fast-Robots/ConnectJup.png">
 
 
 The codebase contains a select number of files that are edited on different interfaces, but complement each other to run the system. The .ino file(s) is where the c++ code is written and is burned onto the board via Arduino IDE and a wired connection. We use Jupyter Notebook to edit the python files on which we write the code that interacts with and controls the firmware that has already been burned onto the device, via Arduino Bluetooth Low Energy capabilities. 
@@ -125,7 +126,7 @@ case ECHO:
 ```
 
 Jupyter Lab Code:
-<img src="/Fast-Robots/task1lab1b.png" alt="About Photo">
+<img src="/Fast-Robots/task1lab1b.png">
 
 2. Send three floats to the Artemis board using the SEND_THREE_FLOATS command and extract the three float values in the Arduino sketch.
 
@@ -163,7 +164,7 @@ ble.send_command(CMD.SEND_THREE_FLOATS, "2.5|8.3|9.6")
 ```
 
 Serial Output:
-![three_floats](three_floats.png)
+<img src="/Fast-Robots/three_floats.png">
 
 
 3. Add a command GET_TIME_MILLIS which makes the robot reply write a string such as “T:123456” to the string characteristic.
@@ -190,7 +191,7 @@ ble.send_command(CMD.GET_TIME_MILLIS, "")
 ```
 
 Serial Output:
-![getmillis](getmillis.png)
+<img src="/Fast-Robots/getmillis.png">
 
 
 4. Setup a notification handler in Python to receive the string value (the BLEStringCharactersitic in Arduino) from the Artemis board. In the callback function, extract the time from the string.
@@ -205,7 +206,6 @@ ble.start_notify(ble.uuid['RX_STRING'], notifhandler)
 ```
 The third line's purpose was to remove the "T:" from GET_TIME_MILLIS() and remain with the time value only. Everytime I would run, the notification handler would automatically show the time under the block in Jupyter.
 
-AAAAAAAA
 
 
 5. Write a loop that gets the current time in milliseconds and sends it to your laptop to be received and processed by the notification handler. 
@@ -230,10 +230,10 @@ case LOOP_TIME:{
     break;
 }
 ```
-For the code above, and the following added cases, I added it to the connection.yaml file.
+For the code above, and the following added cases, I add each to the connection.yaml file.
 
 Jupyter Lab Code:
-![loop](loop.png)
+<img src="/Fast-Robots/loop.png">
 
 The screenshot does not show the entirety of the outputs generated. However, there were 262 outputs in about 7 seconds. If each digit represents a byte, then the data rate is approximately 187 bytes per second.
 
@@ -262,7 +262,7 @@ Jupyter Lab Code:
 ```python
 ble.send_command(CMD.SEND_TIME_DATA, "")
 ```
-![sendtimedata](sendtimedata.png)
+<img src="/Fast-Robots/sendtimedata.png">
 
 
 7. Add a second array that is the same size as the time stamp array. Use this array to store temperature readings. Then add a command GET_TEMP_READINGS that loops through both arrays concurrently and sends each temperature reading with a time stamp. 
@@ -291,17 +291,14 @@ case GET_TEMP_READINGS: {
 ```
 
 Jupyter Lab Code:
-![tempread](tempread.png)
+<img src="/Fast-Robots/tempread.png">
 
-8. Discuss the differences between these two methods, the advantages and disadvantages of both and the potential scenarios that you might choose one method over the other. How “quickly” can the second method record data? The Artemis board has 384 kB of RAM. Approximately how much data can you store to send without running out of memory?
-
-The method implemented in Task 6 uses less memory and bandwidth, compared to the method used in Task 7 that requires more memory and longer transmission time. If each sample uses about 4 bytes for a timestamp and a temperature value, then 
+8. The method implemented in Task 6 uses less memory and bandwidth, compared to the method used in Task 7 that requires more memory and longer transmission time. If each sample uses about 4 bytes for a timestamp and 4 bytes for a temperature value, then there is total of 8 bytes per each sample. Assuming the entirety of the Artemis board's RAM (384 kB) is being used, you can store approximately 48,000 bytes of data to send.
 
 
 Extra Tasks for MAE 5190
 
-9. 
-
+9. Effective Data Rate And Overhead.
 
 Arduino Code:
 ```c++
@@ -334,7 +331,12 @@ case DATA_RATE_REPLY:{
 ```
 
 Jupyter Lab Code:
-![datarate](datarate.png)
+<img src="/Fast-Robots/datarate.png">
+
+Data rate for 5-byte replies: ~40,000 bytes/s
+Data rate for 120-byte replies: ~13,150 bytes/s
+
+Short packets do introduce a lot of overhead, and large replies can reduce overhead. However, once the reply is bigger than what fits in a notification, it must be split up into multiple packets, introducing much overhead and affect throughput.
 
 
 10. Reliability: What happens when you send data at a higher rate from the robot to the computer? Does the computer read all the data published (without missing anything) from the Artemis board? Include your answer in the write-up.
