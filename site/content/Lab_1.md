@@ -357,7 +357,7 @@ plt.title("BLE Data Rate vs. Reply Size")
 plt.grid(True)
 plt.show()
 ```
-<img src="/Fast-Robots/datarate.png">
+<img src="/Fast-Robots/blegraph.png">
 
 
 10. At high enough reansmission rates, the computer cannot receive every single packet that is published by the Artemis board, leading to significant loss in data. This is because BLE has limited bandwidth, and pack can get lost if notifications are produced faster than they can be transmitted and processed.
