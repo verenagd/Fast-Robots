@@ -88,8 +88,7 @@ jupyter lab
 
 Under the connections.yaml file I added the board's MAC address that was printed in the Arduino's Serial Monitor, and updated its Universally Unique Identifier (UUID) that I got from running the following lines.
 
-<img src="/Fast-Robots/macaddress.png" alt="About Photo">
-
+<img src="/Fast-Robots/macaddress.png">
 
 ```python
 from uuid import uuid4
@@ -126,8 +125,7 @@ case ECHO:
 ```
 
 Jupyter Lab Code:
-![ConnectJup](ConnectJup.png)
-
+<img src="/Fast-Robots/task1lab1b.png" alt="About Photo">
 
 2. Send three floats to the Artemis board using the SEND_THREE_FLOATS command and extract the three float values in the Arduino sketch.
 
