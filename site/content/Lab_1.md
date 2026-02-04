@@ -340,6 +340,9 @@ Short packets do introduce a lot of overhead, and large replies can reduce overh
 
 
 After running the DATA_RATE_REPLY case that I made five times, I graphed this chart.
+<img src="/Fast-Robots/blegraph.png">
+
+
 ```python
 import matplotlib.pyplot as plt
 sizes = [5, 50, 100, 120, 150]              # bytes
@@ -357,10 +360,9 @@ plt.title("BLE Data Rate vs. Reply Size")
 plt.grid(True)
 plt.show()
 ```
-<img src="/Fast-Robots/blegraph.png">
 
 
-10. At high enough reansmission rates, the computer cannot receive every single packet that is published by the Artemis board, leading to significant loss in data. This is because BLE has limited bandwidth, and pack can get lost if notifications are produced faster than they can be transmitted and processed.
+10. At high enough transmission rates, the computer cannot receive every single packet that is published by the Artemis board, leading to significant loss in data. This is because BLE has limited bandwidth, and pack can get lost if notifications are produced faster than they can be transmitted and processed.
 
 
 ### Resources & Collaborations
