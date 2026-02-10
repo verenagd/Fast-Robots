@@ -16,6 +16,8 @@ accent_color = "#b48cff"        # light purple
 accent_color_dark = "#9d7ae8"
 emoji_favicon = "🚀✨"
 styles = ["custom.css"]
+katex = true
+
 
 
 [extra.nav]
