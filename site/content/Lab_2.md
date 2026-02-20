@@ -399,7 +399,7 @@ Unfortunately, when I first plugged in my car, it worked for a few seconds with 
 
 The following video is of tricks I performed when I was able to borrow a friend's car :).
 
-<video src="{{ get_url(path='trick.mp4') }}" >
+<video src="/Fast-Robots/trick.mp4" >
 
 
 
