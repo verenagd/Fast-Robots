@@ -397,6 +397,9 @@ Unfortunately, when I first plugged in my car, it worked for a few seconds with 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/R2u-nRrmThk?si=5sPtJMBhi_iL-jmx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+The following video is of tricks I performed when I was able to borrow a friend's car :).
+
+<video controls width="100%"><source src="trick.mp4" type="video/mp4"></video>
 
 
 ### Resources & Collaborations
