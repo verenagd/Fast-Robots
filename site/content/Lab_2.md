@@ -266,7 +266,7 @@ As you can see in the video below, the filter reduces the drift, and does not ma
 
 The gyroscope's accuracy can be controlled by calibrating the bias at startup with the device being stationary or by selecting a value of $\alpha$ that is suitable for the system. A lower $\alpha$ corrects the acceleration more often. 
 
-### Task 3 Sampling Data
+### Task 3 - Sampling Data
 
 I attempted running the IMU and collected the following information from the run:
 02:42:47.223 -> DONE CAPTURE
