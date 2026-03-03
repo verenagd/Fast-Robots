@@ -48,14 +48,21 @@ The wire connections can be seen above and in the prelab section, where I chose 
 
 Both ToF sensors have three modes (Short, Medium, and Long), with the Medium mode requiring an additional library. The difference between the short, medium, and long modes have to do with the frequency of the pulses of light that are being shot, and how much time is allocated to wait for the response. The short mode has the fastest sampling rate, making it better suited for short-distances where the light does not have to travel such long distances. The medium and long modes are more sensitive to ambient light, as the time allocated to waiting for the response is greater, allowing it to pick up on more photons that are not necessarily from the sensor’s original pulse of light.
 
-Since our car will be performing high-paced manuevers and operates at quick speeds, I chose the Short mode to be the one that best suits our needs.
+Since our car will be performing high-paced manuevers and operates at quick speeds, I chose the Short mode to be the one that best suits our needs. The following is the output of the ToF sensor at the same distance but at different modes.
 
+<img src="/Fast-Robots/Short_Run_1.png">
 
--------------- PICTURES WITH MODES --------------
+<img src="/Fast-Robots/Long_Run_1.png">
+
+With no filter applied, both measurements have a maximum range of 5mm, however, the short mode reported the object to be a bit farther than the long mode. The actual distance was about 103 mm. 
 
 ### Task 7 - Range, Accuracy, and Repeatability
 
-Range, accuracy, and repeatability
+The sensor is rated for a range of 0 - 400cm. I set up my distance sensor and placed the lab kit box along a tape measure and decided to compare its output to the actual measurement using the set-up below.
+
+<img src="/Fast-Robots/TAPE_SETUP.png">
+
+----------- BRUH ----------
 
 
 ### Task 8 - Integrating Both ToF Sensors
@@ -94,12 +101,41 @@ Every "Artemis clock time (ms)" output is printed at the end of the loop, theref
 
 ### Task 10 - ToF Data vs Time
 
-Finally, I connected the IMU and decided to collect data for approximately 5 seconds at a time and send it over Bluetooth to the computer.
+Finally, I connected the IMU and decided to collect data for approximately 5 seconds at a time and send it over Bluetooth to the computer using this code to collect the data:
 
---------- TOF DATA--------
+```c++
+while(millis() - startMillis < sampletime){
+          recorded = false;
+          if(tof_lat.checkForDataReady() && tof_front.checkForDataReady() ){
+            toflat_array[samplecount] = tof_lat.getDistance();
+            toffront_array[samplecount] = tof_front.getDistance();
+            tof_lat.clearInterrupt();
+            tof_front.clearInterrupt();
+            time_array[samplecount] = millis();
+            samplecount++;    
+          }
+      }
+```
+
+I added both checkForDataReady() routine to the if statement, as separating the two as I did previosuly created a phase difference in the sensors' output.
+
+<img src="/Fast-Robots/TWO_TOF.png">
+
 ---------- IMU ------------
 
 
 ### Additional Task 5190
 
-There are many different kinds of distance sensors that are based on infrared transmission with different applications due to their nature. Amplitude-based IR sensors are very simple in nature, as they consistare good for short-ranged applications (<10cm)
+There are many different kinds of distance sensors that are based on infrared transmission with different applications due to their nature. Below are a few that were mentioned in lecture:    
+
+    Amplitude-based IR sensors have very simple circuitry, and measure the intensity of reflected infrared light (using a photodiode receiver) that was emitted via an IR LED transmitter. They are good for short-ranged (<10cm), fast-paced applications (the simple circuitry has not complex signal or time processing), and do not work well with high ambient light as IR intensity decreases rapidly with distance traveled.
+
+    IR triangulation sensors also have simple circuitry and emit focused IR light, however, this sensor measures the angle of the reflection off an object using a position-sensitive detector or CMOS array. These work well in applications < 1m and are not sensitive to surface colors or texture, due to the geometry of the angle change with distance and the fact that it matters more about where the light lands, not the intensity of it.
+
+    IR ToF sensors emit pulse-modulated signals and records the time until the signal returns. Because of this, it is mostly insensitive to texture, color and ambient light, and works best in 0.1 - 4m applications. 
+
+I decided to test the sensitivity of the ToF sensors when held at the same distance at the wall against white paint, clear plastic, and a black waterproof jacket. The sensor had nearly identical output data for all textures, showing that it was not too sensitive to changes in material and color.
+
+
+Jacket test:
+<img src="/Fast-Robots/TOF_TEST.png">
