@@ -18,7 +18,7 @@ As for the wiring, I attempted to cut the wires to lengths that were as short as
 
 The Artemis and the motor drivers are powered by two separate batteries in order to eliminate any possible fluctuations in current supplied, given that the motor drivers pull a lot more current than the Artemis, and may do so sporadically. This can cause voltage spikes, dips, and noise. It is in our best interest to ensure that the Artemis receives stable power given that it controls the motor drivers, all sensors, and overall communication. 
 
-### Task 1 - Soldering the Motor drivers
+### Task 1 - Soldering & Setting Up the Motor drivers
 
 I decided to solder the motor drivers as follows, again parallel-coupling the two input and outputs, and grounding the signal to the Artemis.
 
