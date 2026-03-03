@@ -10,7 +10,7 @@ In this lab, we wire up and run tests on our motor drivers. The following diagra
 
 <img src="/Fast-Robots/PINOUT.png">
 
------- CAR LABELED WITH PIECES --------
+-------------------- CAR LABELED WITH PIECES --------------------
 
 I made sure to choose pins that supported PWM and that made physical sense with regard to the motor drivers' location. The two inputs and outputs are parallel coupled for each motor driver, which is only possible because they are controlled by the same chip running on its own clock circuitry. <- CAN CHANGE
 
@@ -98,11 +98,11 @@ I placed everything onto the car, and starting running it untethered.
 
 In order to test the lower PWM limit for which the robot moves forward and on-axis turns while on the ground I decided to test the lowest value for which it drive forward and on-axis turn while starting from rest.
 
-The lower values that the car starts from rest is with a PWM signal of ~25, anything smaller results in the following behavior where the motor cannot overcome the static friction:
+The lower values that the car starts from rest is with a PWM signal of ~30, anything smaller results in the following behavior where the motor cannot overcome the static friction:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/aC39HMUdOSA?si=NdtEi8UWbuPlttxQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-The car requires more power to perform an on-axis spin. I found that it required at least ~125 of a PWM signal, if not it will do the following:
+The car requires more power to perform an on-axis spin. I found that it required at least ~130 of a PWM signal, if not it will do the following:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/aC39HMUdOSA?si=NdtEi8UWbuPlttxQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -144,8 +144,24 @@ Now, I decided to run my car untethered, to see how it performs doing basic turn
 
 ### Additional Tasks - 5190
 
-In order to measure the frequency that the analogWrite generates, I turn to the oscilloscope's output for the 50% duty cycle. The image shows that the signal has a period of about 5.464 ms, which equates to about 183 Hz. The frequency is the same for all duty cycles. 
+In order to measure the frequency that the analogWrite generates, I turn to the oscilloscope's output. The image shows that the signal has a period of about 5.464 ms, which equates to about 183 Hz. The frequency is the same for all duty cycles. 
 
 <img src="/Fast-Robots/50DUTY.png">
 
-This frequency seems to work well, however, any lower fre
+This frequency seems to be adequtely fast, given that the motors were able to run well, however, if the frequency dips too low, then the current ripple in the signal increases, along with noise and vibration given the filtering nature of the motor. Manually configuring the timers to generate a faster PWM signal may eliminate these effects and provide a cleaner signal that would make the motors run more efficiently.
+
+
+As previously shown, the lowest PWM value that the robot starts moving forward in a straight line is ~30. However, once it is running, the minimum PWM signal needed to do so is about ~35 for the right wheels and ~44 for the left wheels (given the motor calibration). Also it is important to note that this was run on vinyl (unleveled) floor, not the lab floor.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tOaHBWSKOWo?si=MFMv4S_3BvCL8MRu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+Additionally, the lowest PWM signal for the robot to perform a one-axis turn on from rest was found to be ~130, however, the minimum value for it to continue turning is about 135 and 169 for the right and left wheels respectively.
+
+<video controls width="100%">
+  <source src="/Fast-Robots/turned.mp4" type="video/mp4">
+</video>
+
+### References
+
+This lab required significant time in the lab for soldering, therefore for the majority of my questions I went to the TAs and Professor Farrell for help. Aside from this, I referened Aidan Derocher's course website from last year.
