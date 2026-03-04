@@ -12,9 +12,9 @@ In this lab, we wire up and run tests on our motor drivers. The following diagra
 
 <img src="/Fast-Robots/Car.png">
 
-I made sure to choose pins that supported PWM and that made physical sense with regard to the motor drivers' location. The two inputs and outputs are parallel coupled for each motor driver, which is only possible because they are controlled by the same chip running on its own clock circuitry. <- CAN CHANGE
+I made sure to choose pins that supported PWM and that made physical sense with regard to the motor drivers' location. The two inputs and outputs are parallel coupled for each motor driver, which is only possible because they are controlled by the same chip running on its own clock circuitry.
 
-As for the wiring, I attempted to cut the wires to lengths that were as short as possible to eliminate EMI, however, long enough to have slack such that connections remain intact. I decided to follow common practice, making sure that wires that supply voltage are red, and all grounding wires are black. The remaining colors I chose personally, and tried to remain consistent. To further reduce EMI between wires and components, I decided to place the Artemis at the far back, away from the motor drivers' battery, twisted wries pairs, and made sure that there were no unintential wire loops. 
+As for the wiring, I attempted to cut the wires to lengths that were as short as possible to eliminate EMI, however, long enough to have slack such that connections remain intact. I decided to follow common practice, making sure that wires that supply voltage are red, and all grounding wires are black. The remaining colors I chose personally, and tried to remain consistent. To further reduce EMI between wires and components, I decided to place the Artemis at the far back, away from the motor drivers' battery, twisted wires pairs, and made sure that there were no unintentional wire loops. 
 
 The Artemis and the motor drivers are powered by two separate batteries in order to eliminate any possible fluctuations in current supplied, given that the motor drivers pull a lot more current than the Artemis, and may do so sporadically. This can cause voltage spikes, dips, and noise. It is in our best interest to ensure that the Artemis receives stable power given that it controls the motor drivers, all sensors, and overall communication. 
 
@@ -30,7 +30,7 @@ Since the battery that we'll be using provides 3.7V, I set the power supply to j
 
 ### Task 3 - Generating PWM Signals
 
-To test if the Artemis pins are generating PWM signals, and that they are succesfully being transmitted by the motor drivers, I hooked up the motor driver's output for each of its output channels to an oscilloscope and recorded it:
+To test if the Artemis pins are generating PWM signals, and that they are successfully being transmitted by the motor drivers, I hooked up the motor driver's output for each of its output channels to an oscilloscope and recorded it:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/d6bkE2Y94Qc?si=uNlrwgpivWTg02Bd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -72,7 +72,7 @@ After having verified the code and signal outputs, I connected each motor driver
 Now, I decided to run the same tests with the motor drivers being powered by a single 850 mAh battery.
 
 Using this code:
-```c+++
+```c++
   Right Wheel  
   analogWrite(RMD_F, 128); // 50% speed
 
@@ -98,7 +98,7 @@ I placed everything onto the car, and starting running it untethered.
 
 In order to test the lower PWM limit for which the robot moves forward and on-axis turns while on the ground I decided to test the lowest value for which it drive forward and on-axis turn while starting from rest.
 
-The lower values that the car starts from rest is with a PWM signal of ~30, anything smaller results in the following behavior where the motor cannot overcome the static friction:
+The lowest PWM value at which the car starts moving from rest is approximately 30. Anything smaller results in the following behavior where the motor cannot overcome the static friction:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/aC39HMUdOSA?si=NdtEi8UWbuPlttxQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -122,7 +122,7 @@ This led me to empirically find a ratio between what duty cycle I should run one
 
 ### Task 10 - Run!
 
-Now, I decided to run my car untethered, to see how it performs doing basic turns and manuevers using the following code:
+Now, I decided to run my car untethered, to see how it performs doing basic turns and maneuvers using the following code:
 
 ```c++
   startMillis = millis();
@@ -148,7 +148,7 @@ In order to measure the frequency that the analogWrite generates, I turn to the 
 
 <img src="/Fast-Robots/50DUTY.png">
 
-This frequency seems to be adequtely fast, given that the motors were able to run well, however, if the frequency dips too low, then the current ripple in the signal increases, along with noise and vibration given the filtering nature of the motor. Manually configuring the timers to generate a faster PWM signal may eliminate these effects and provide a cleaner signal that would make the motors run more efficiently.
+This frequency seems to be adequately fast, given that the motors were able to run well, however, if the frequency dips too low, then the current ripple in the signal increases, along with noise and vibration given the filtering nature of the motor. Manually configuring the timers to generate a faster PWM signal may eliminate these effects and provide a cleaner signal that would make the motors run more efficiently.
 
 
 As previously shown, the lowest PWM value that the robot starts moving forward in a straight line is ~30. However, once it is running, the minimum PWM signal needed to do so is about ~35 for the right wheels and ~44 for the left wheels (given the motor calibration). Also it is important to note that this was run on vinyl (unleveled) floor, not the lab floor.
