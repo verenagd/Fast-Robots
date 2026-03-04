@@ -35,6 +35,9 @@ I ran some tests to make sure I could connect and send commands to the Artemis w
 
 <img src="/Fast-Robots/BATT_WORK.png">
 
+### Task 2
+
+I installed the SparkFun VL53L1X 4m laser distance sensor library.
 
 ### Task 3 & 4 - Connections & Wiring
 
@@ -54,16 +57,49 @@ Since our car will be performing high-paced manuevers and operates at quick spee
 
 <img src="/Fast-Robots/Long_Run_1.png">
 
-With no filter applied, both measurements have a maximum range of 5mm, however, the short mode reported the object to be a bit farther than the long mode. The actual distance was about 103 mm. 
+ 
 
 ### Task 7 - Range, Accuracy, and Repeatability
 
-The sensor is rated for a range of 0 - 400cm. I set up my distance sensor and placed the lab kit box along a tape measure and decided to compare its output to the actual measurement using the set-up below.
+The sensor is rated for a range of 0 - 400cm, however, I noticed that it only started reading values of 0 when the box was held about 20 mm from it. I set up my distance sensor and placed the lab kit box along a tape measure and decided to compare its output to the actual measurement using the set-up below.
+
+Below are the measurements that I recorded to see how stable the sensor's data was over time.
 
 <img src="/Fast-Robots/TAPE_SETUP.png">
 
------------ BRUH ----------
+<div style="display: flex; gap: 16px; flex-wrap: wrap;">
 
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/Short_Run_2.png" alt="B">
+    <figcaption>Short Mode 1</figcaption>
+  </figure>
+
+   <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/Short_Run_3.png" alt="B">
+    <figcaption>Short Mode 2</figcaption>
+  </figure>
+
+</div>
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap;">
+
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/Long_Run_2.png" alt="A">
+    <figcaption>Long Mode 1</figcaption>
+  </figure>
+
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/Long_Run_3.png" alt="B">
+    <figcaption>Long Mode 2</figcaption>
+  </figure>
+
+</div>
+
+In short mode, the distance measurements ranged rougly between 993 mm and 997 mm, producing a spread of +/- 2mm about the mean. This indicates strong repeatability, with most data points fluctuating only 1-2 mm between successive measurements and the random spikes being attributed to noise.
+
+In long mode, the measurements have a slightly greater variation with a spread of about +/- 3-4 mm about the mean. This makes sense as the sensor increases its measurement timing and signal amplification in this mode which can introduce additional noise.
+
+The actual distance was about 1000 mm, with the Short mode having about 0.5% error, and the long mode having about 0.6% error
 
 ### Task 8 - Integrating Both ToF Sensors
 
@@ -99,9 +135,9 @@ Output:
 
 Every "Artemis clock time (ms)" output is printed at the end of the loop, therefore the amount of time between measurements can be estimated by taking the difference between the times when they are printed. For example, the lateral distance is followed by a clock time of 8070, and then is printed out again at 8177. This is a difference of about 100 ms. For the Front distance, similar can be said (8105 → 8195), with a difference of 90 ms. Therefore, both sensors output data at a frequency of about 10 Hz. There is also a delay / phase shift between the two of about 8105 − 8070 = 35 ms, 8195 − 8177 = 18 ms, 8297 - 8272 = 25 ms, averaging to 26 ms. The current limiting factor is how quickly the sensor is able to have new data available. The checkForDataReady function waits until the sensor has adequate data to output, however the sampling frequency itself is pretty consistent. The loop itself takes about 7.84 ms, as seen from the Artemis clock output.
 
-### Task 10 - ToF Data vs Time
+### Task 10 - ToF Data vs Time, IMU Data vs Time
 
-Finally, I connected the IMU and decided to collect data for approximately 5 seconds at a time and send it over Bluetooth to the computer using this code to collect the data:
+Finally, I decided to collect data for approximately 5 seconds at a time and send it over Bluetooth to the computer using this code to collect the data:
 
 ```c++
 while(millis() - startMillis < sampletime){
@@ -121,21 +157,25 @@ I added both checkForDataReady() routine to the if statement, as separating the 
 
 <img src="/Fast-Robots/TWO_TOF.png">
 
----------- IMU ------------
+<img src="/Fast-Robots/IMU_Lab3.png">
 
 
 ### Additional Task 5190
 
 There are many different kinds of distance sensors that are based on infrared transmission with different applications due to their nature. Below are a few that were mentioned in lecture:    
 
-    Amplitude-based IR sensors have very simple circuitry, and measure the intensity of reflected infrared light (using a photodiode receiver) that was emitted via an IR LED transmitter. They are good for short-ranged (<10cm), fast-paced applications (the simple circuitry has not complex signal or time processing), and do not work well with high ambient light as IR intensity decreases rapidly with distance traveled.
+Amplitude-based IR sensors have very simple circuitry, and measure the intensity of reflected infrared light (using a photodiode receiver) that was emitted via an IR LED transmitter. They are good for short-ranged (<10cm), fast-paced applications (the simple circuitry has not complex signal or time processing), and do not work well with high ambient light as IR intensity decreases rapidly with distance traveled.
 
-    IR triangulation sensors also have simple circuitry and emit focused IR light, however, this sensor measures the angle of the reflection off an object using a position-sensitive detector or CMOS array. These work well in applications < 1m and are not sensitive to surface colors or texture, due to the geometry of the angle change with distance and the fact that it matters more about where the light lands, not the intensity of it.
+IR triangulation sensors also have simple circuitry and emit focused IR light, however, this sensor measures the angle of the reflection off an object using a position-sensitive detector or CMOS array. These work well in applications < 1m and are not sensitive to surface colors or texture, due to the geometry of the angle change with distance and the fact that it matters more about where the light lands, not the intensity of it.
 
-    IR ToF sensors emit pulse-modulated signals and records the time until the signal returns. Because of this, it is mostly insensitive to texture, color and ambient light, and works best in 0.1 - 4m applications. 
+IR ToF sensors emit pulse-modulated signals and records the time until the signal returns. Because of this, it is mostly insensitive to texture, color and ambient light, and works best in 0.1 - 4m applications. 
 
 I decided to test the sensitivity of the ToF sensors when held at the same distance at the wall against white paint, clear plastic, and a black waterproof jacket. The sensor had nearly identical output data for all textures, showing that it was not too sensitive to changes in material and color.
 
 
 Jacket test:
 <img src="/Fast-Robots/TOF_TEST.png">
+
+### References
+
+I referenced Aidan Derocher's course website from last year as recommended, and worked with the TAs and Farrell in order to debug setting up the addresses for the two distinct ToF sensors.
