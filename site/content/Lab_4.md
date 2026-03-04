@@ -10,7 +10,7 @@ In this lab, we wire up and run tests on our motor drivers. The following diagra
 
 <img src="/Fast-Robots/PINOUT.png">
 
--------------------- CAR LABELED WITH PIECES --------------------
+<img src="/Fast-Robots/Car.png">
 
 I made sure to choose pins that supported PWM and that made physical sense with regard to the motor drivers' location. The two inputs and outputs are parallel coupled for each motor driver, which is only possible because they are controlled by the same chip running on its own clock circuitry. <- CAN CHANGE
 
