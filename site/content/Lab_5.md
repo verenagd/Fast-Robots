@@ -6,31 +6,97 @@ title = "Lab 5"
 
 ### Prelab
 
-In this lab, we implement PI control using the ToF sensor data to maintain the car 1 ft (304mm) away from a wall when driving the car as fast as possible.
+In this lab, I implement PI control using the ToF sensor data to maintain the car 1 ft (304mm) away from a wall when driving the car as fast as possible.
 
 To complete this goal, there are a number of supporting cases and flags that I created to be able to run things smoothly over BLE without risk of losing control of the car.
 
-The flags are listed below:
-PI_running
+The cases that I would use for each run are PI_POS, STOP_CAR, and SEND_DATA. 
 
-I created an order of events that used these cases for each test run:
-
-1. First, I send over the proportional, integral, and derivative gains that I calculated for the run.
-
-```python
-
-```
-2. Then I send over a command to start the run. I limited the run to last no more than 15 seconds.
+The PI_POS case sets up all variables and flags necessary for the PI_POS() function to run in the main loop.
 
 ```c++
-
+case PI_POS:{
+    float p_gain;
+    float i_gain;
+    success = robot_cmd.get_next_value(p_gain);
+    if (!success)
+    return;
+    success = robot_cmd.get_next_value(i_gain);
+    if (!success)
+    return;
+    prop_gain = p_gain;
+    int_gain = i_gain;
+    integral = 0;
+    last_pi_ms = millis();
+    ext_number = 0;        
+    last_tof_time = 0;
+    prev_tof_time = 0;
+    loop_samplecount = 0;
+    samplecount = 0;
+    tof_front.startRanging();
+    while(!tof_front.checkForDataReady()) delay(1);
+    last_tof_reading = tof_front.getDistance();      
+    last_tof_reading_ext = last_tof_reading;
+    pi_run = true;
+    break;
+}    
 ```
 
-3. Once the run stops, I send over the data that was collected to understand what the ToF readings were and what Artemis was outputting to the motors.
+Setting pi_run to true means that the PI_POS() function runs in the main loop:
+
+```c++
+void loop(){
+    ...
+    if(pi_run){
+      PI_RUN();
+      }
+}
+```
+
+In order to stop the run I would send the STOP_CAR command over BLE which runs this switch case:
+
+```c++
+case STOP_CAR:{
+    pi_run = false;
+    tof_front.stopRanging();
+    hardStop();
+    break;
+}
+```
+The hardStop() function sets all four motor driver pins(including forward and reverse simultaneously) to 255.
+
+The PI_RUN() function collects data throughout the run. Once the run is over I would send data over to my computer by running the following command over BLE:
+
+```c++
+case SEND_DATA:{
+for (int i=0; i<samplecount;i++){  
+    tx_estring_value.clear(); 
+    tx_estring_value.append("Time (ms): ");
+    tx_estring_value.append((int)time_array[i]);       
+    tx_estring_value.append(", Front (mm): ");
+    tx_estring_value.append((int)toffront_array[i]);
+    tx_estring_value.append(", Motor PWM: ");
+    tx_estring_value.append((int)motor_out_array[i]);
+    tx_estring_value.append(", Extrapolated (mm): ");
+    tx_estring_value.append((int)extr_array[i]);
+    tx_characteristic_string.writeValue(tx_estring_value.c_str());
+    }
+    break;
+}
+```
+On the Jupyter lab side I'd send the commands using the following lines of code:
+
+```python
+ble.send_command(CMD.PID_POS, "0.23|0.013")
+ble.send_command(CMD.STOP_CAR, "")
+ble.send_command(CMD.SEND_DATA, "")
+```
+
+The values in the PID_POS command represent the proportional and integrator gains respectively.
 
 ### Task 1 - ToF Sensor Sampling Frequency
 
-To begin, I wanted to measure the frequency that the ToF returns new data. I did a sample run with the stationary car, collected ToF data and sent it using the following code:
+To begin, I wanted to measure the frequency that the ToF returns new data. 
 
 ``` python
 def notifhandler(bleuuid, bytearray):
@@ -171,13 +237,13 @@ I decided to leave a tolerance of about 20mm (6.5%).
 
 Running this gave me the following output:
 
-\\\\\\\\\\ INSERT VIDEO\\\\\\\\\\\
+<iframe width="560" height="315" src="https://www.youtube.com/embed/U-VG9dRvg2w?si=jFa-nIF3NgvUwFPy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<img src="/Fast-Robots/PROP_CONTROL.png">
+<img src="/Fast-Robots/P_OUTPUTT.png">
 
-As you can see, there is a great error 
+As you can see, the car never reaches the target value. 
 
-Now, I decided to add in an integrator gain. I added in global variables, int_gain, and integral, and last_pi_ms.
+Now, I decided to add in an integrator gain. I chose this value by going off of the proportional gain value and dividng it by an integrating time of ~20s I ended up with a value of 0.013. I added in global variables, int_gain, and integral, and last_pi_ms.
 
 Updated the case:
 
@@ -215,12 +281,11 @@ int pwm = (prop_gain * error) + (int_gain * integral);
 
 Here is the run:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XXd83o0wEvQ?si=e8b-7w_VzdtJAhIB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZEV4pDjvU2s?si=f6AZmr9E3MF-3Suk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 From the following output we can see how the car managed to reach the target goal, with initial overshoot. The later deviations are from pushing the car and it correcting itself.
 
-<img src="/Fast-Robots/PI_CONTROL.png">
-
+<img src="/Fast-Robots/PI_OUTPUTT.png">
 
 ### Task 3 - Determining Speed of PI Control Loop
 
@@ -281,6 +346,7 @@ if (tof_front.checkForDataReady()){
       tof_front.clearInterrupt();
       ext_number++;
       ...
+    }
 ```
 And added:
 
@@ -297,18 +363,60 @@ if(sensor_dt > 0){
 }
 float error = estimated_pos - target;
 ```
+
 Lastly, I added these to the PI_POS case to reset the variable for every time I want to run PI control:
 
 ```c++
-ext_number = 0;        // ← add these
+ext_number = 0;        
 last_tof_time = 0;
 prev_tof_time = 0;
-last_tof_reading = 1000.0;      // start far away not 0
-last_tof_reading_ext = 1000.0;
+tof_front.startRanging();
+while(!tof_front.checkForDataReady()) delay(1);
+last_tof_reading = tof_front.getDistance();      
+last_tof_reading_ext = last_tof_reading; 
 ```
 
 Here's a video of the run with the extrapolation taking place:
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Gq3tXxEq9uE?si=RguEMjhTqVEslHwH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Here is data from a second run:
+
+<img src="/Fast-Robots/EXT_OUTPUT.png">
+
+Here is a another graph of the Raw ToF data compared to the extrapolated data. As you can see, there is not much differene between the two. I believe this is due to the quite rate that I set the ToF to generate data with.
+
+<img src="/Fast-Robots/EXTRA_TOF.png">
 
 
+### 5000-level Task - Wind-Up Protection
 
+With no wind-up protection, the integrator term accumulates unboundedly. If the value grows too large, the error can cause the controller to run the motors at full power regardless of the position it is at. This is a great cause for concern, as the only way to correct this is unwinding in the opposite direction. Therefore, I constrained the integral to not exceed -500 or 500, which intentionally gives the integrator small weight on the PWM control, as I only wish to use it to correct the residual steady-state error that the P term cannot overcome. With a Ki of 0.013, the maximum PWM that it can contribute is 6.5 (0.013*500). 
+
+```c++
+integral += error * dt;
+integral = constrain(integral, -500, 500); 
+```
+With wind-up protection:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PwtndaW5R2I?si=EzPQrehUWt-Exzis" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+Without:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wvO36B59tYY?si=pVqXDvpAvimemckT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+With wind-up correction:
+<img src="/Fast-Robots/WITH_WINDUP.png">
+
+
+Without wind-up correction:
+<img src="/Fast-Robots/NO_WINDUP.png">
+
+
+### Added Videos of More Runs:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gg9ojgJSWcY?si=WOwXyb0UrRFYU4Dx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QzXRpLEsKTg?si=1tQvV5seG1yWHHDH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+As for speed, the maximum linear speed observed came from logged sensor data where the car dropped 122 mm in 125 ms, which comes out to a speed of 0.98 m/s.
