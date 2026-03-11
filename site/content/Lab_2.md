@@ -2,17 +2,15 @@
 title = "Lab 2"
 +++
 
-## Lab 2
-
 In this lab we begin to work with our IMU and understand how to edit and analyze the accelerometer and gyroscope's output.
 
-### Prelab
+## Prelab
 
 I installed the SparkFun 9DOF IMU Breakout_ICM 20948_Arduino Library in Arduino IDE, and connected the IMU to the Redboard Artemis Nano board via the QWIIC connectors as seen below.
 
 <img src="/Fast-Robots/Connection.png">
 
-### Task 1 - Accelerometer
+## Task 1 - Accelerometer
 
 I started off by running the IMU data to see if it worked as shown below.
 
@@ -210,7 +208,7 @@ $$
 </div>
 
 
-### Task 2 - Gyroscope
+## Task 2 - Gyroscope
 
 For the gyroscope, I used the class equation: $\theta_{g}=\theta_{g}+GyroReading \cdot dt$ to compute pitch, roll, and yaw angles.
 
@@ -266,7 +264,7 @@ As you can see in the video below, the filter reduces the drift, and does not ma
 
 The gyroscope's accuracy can be controlled by calibrating the bias at startup with the device being stationary or by selecting a value of $\alpha$ that is suitable for the system. A lower $\alpha$ corrects the acceleration more often. 
 
-### Task 3 - Sampling Data
+## Task 3 - Sampling Data
 
 I attempted running the IMU and collected the following information from the run:
 02:42:47.223 -> DONE CAPTURE
@@ -404,6 +402,6 @@ The following video is of tricks I performed when I was able to borrow a friend'
 </video>
 
 
-### Resources & Collaborations
+## Resources & Collaborations
 
 I used ChatGPT to help solve the nonzero pitch values as explained above, to help create the frequency graphs in python, and to help write the process in void loop that allowed me to collect data and timestamps to process later on.

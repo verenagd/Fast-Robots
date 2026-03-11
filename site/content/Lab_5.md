@@ -2,9 +2,7 @@
 title = "Lab 5"
 +++
 
-## Lab 5
-
-### Prelab
+## Prelab
 
 In this lab, I implement PI control using the ToF sensor data to maintain the car 1 ft (304mm) away from a wall when driving the car as fast as possible.
 
@@ -94,7 +92,7 @@ ble.send_command(CMD.SEND_DATA, "")
 
 The values in the PID_POS command represent the proportional and integrator gains respectively.
 
-### Task 1 - ToF Sensor Sampling Frequency
+## Task 1 - ToF Sensor Sampling Frequency
 
 To begin, I wanted to measure the frequency that the ToF returns new data. 
 
@@ -156,7 +154,7 @@ Now, there was much more data outputted, with a frequency of about 48 Hz.
 
 <img src="/Fast-Robots/TOF_FREQ_BUDGET.png">
 
-### Task 2 - Calculating PI
+## Task 2 - Calculating PI
 
 Now I decided to calculate the PI control, and decouple it from ToF readings, such that the loop runs regardless of whether or not data from the ToF sensors was received. The PI control will take in measurements from the ToF sensors, however, if the data is not ready in time then the new PI values are calculated based on the previous ToF sensor values. For the rest of this lab, the only ToF data that will be used will be from the front sensor. 
 
@@ -287,7 +285,7 @@ From the following output we can see how the car managed to reach the target goa
 
 <img src="/Fast-Robots/PI_OUTPUTT.png">
 
-### Task 3 - Determining Speed of PI Control Loop
+## Task 3 - Determining Speed of PI Control Loop
 
 I added in a separate array and counter to track how often the PI control loop runs:
 
@@ -325,7 +323,7 @@ This would output:
 
 Averaging all of the times (ignoring the spikes due to write_data() sending BLE packets every 500 ms) gives an average dt of 9.1 ms, which equates to ~110Hz. This is nearly twice as fast as the ToF sensor data, meaning that at least half of the time the PI loop is running based on an expired value.
 
-### Task 4 - Extrapolating an Estimated Distance
+## Task 4 - Extrapolating an Estimated Distance
 
 Instead of using the previous datapoint to calculate the necessary PWM value, I'll extrapolate an estimate for the car's distance to the wall using the amount of time that has passed, and the slope between the two most recent datapoints.
 
@@ -389,7 +387,7 @@ Here is a another graph of the Raw ToF data compared to the extrapolated data. A
 <img src="/Fast-Robots/EXTRA_TOF.png">
 
 
-### 5000-level Task - Wind-Up Protection
+## 5000-level Task - Wind-Up Protection
 
 With no wind-up protection, the integrator term accumulates unboundedly. If the value grows too large, the error can cause the controller to run the motors at full power regardless of the position it is at. This is a great cause for concern, as the only way to correct this is unwinding in the opposite direction. Therefore, I constrained the integral to not exceed -500 or 500, which intentionally gives the integrator small weight on the PWM control, as I only wish to use it to correct the residual steady-state error that the P term cannot overcome. With a Ki of 0.013, the maximum PWM that it can contribute is 6.5 (0.013*500). 
 
@@ -413,7 +411,7 @@ Without wind-up correction:
 <img src="/Fast-Robots/NO_WINDUP.png">
 
 
-### Added Videos of More Runs:
+## Added Videos of More Runs:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/gg9ojgJSWcY?si=WOwXyb0UrRFYU4Dx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 

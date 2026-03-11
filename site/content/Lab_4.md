@@ -2,9 +2,7 @@
 title = "Lab 4"
 +++
 
-## Lab 4
-
-### Prelab
+## Prelab
 
 In this lab, we wire up and run tests on our motor drivers. The following diagram shows how I decided to wire all the devices to the Artemis, including the batteries for the motor drivers and the Artemis itself. 
 
@@ -18,7 +16,7 @@ As for the wiring, I attempted to cut the wires to lengths that were as short as
 
 The Artemis and the motor drivers are powered by two separate batteries in order to eliminate any possible fluctuations in current supplied, given that the motor drivers pull a lot more current than the Artemis, and may do so sporadically. This can cause voltage spikes, dips, and noise. It is in our best interest to ensure that the Artemis receives stable power given that it controls the motor drivers, all sensors, and overall communication. 
 
-### Task 1 - Soldering & Setting Up the Motor drivers
+## Task 1 - Soldering & Setting Up the Motor drivers
 
 I decided to solder the motor drivers as follows, again parallel-coupling the two input and outputs, and grounding the signal to the Artemis.
 
@@ -28,7 +26,7 @@ Before connecting the motor driver to the car, it is important to run some tests
 
 Since the battery that we'll be using provides 3.7V, I set the power supply to just that, and set a current limit of about 2.5A, given that I parallel coupled the two input and outputs.
 
-### Task 3 - Generating PWM Signals
+## Task 3 - Generating PWM Signals
 
 To test if the Artemis pins are generating PWM signals, and that they are successfully being transmitted by the motor drivers, I hooked up the motor driver's output for each of its output channels to an oscilloscope and recorded it:
 
@@ -59,7 +57,7 @@ I ran two different duty cycles (50% and 75%) to see the difference in the outpu
 </div>
 
 
-### Task 4 - Testing the Motors
+## Task 4 - Testing the Motors
 
 After having verified the code and signal outputs, I connected each motor driver to the car's actual motors to see if I could turn the wheels forwards and backwards.
 
@@ -67,7 +65,7 @@ After having verified the code and signal outputs, I connected each motor driver
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-zHhpDWJS7w?si=XEPEHqVj_Yt9Wz01" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Task 5 - Battery-Powered Tests
+## Task 5 - Battery-Powered Tests
 
 Now, I decided to run the same tests with the motor drivers being powered by a single 850 mAh battery.
 
@@ -83,18 +81,18 @@ Using this code:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CZvlztkX64I?si=fMPLPHSBigTJfuHn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
-### Task 6 - Testing All Motor Drivers
+## Task 6 - Testing All Motor Drivers
 
 The above tests were run for both motor drivers, ensuring that all connections are properly soldered and wired, and there are no software or hardware issues.
 
 
-### Task 7 - Running the Car
+## Task 7 - Running the Car
 
 I placed everything onto the car, and starting running it untethered.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TRTr8imcpfw?si=4B35cXZb3MsG_zOj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Task 8 - Test PWM Limits
+## Task 8 - Test PWM Limits
 
 In order to test the lower PWM limit for which the robot moves forward and on-axis turns while on the ground I decided to test the lowest value for which it drive forward and on-axis turn while starting from rest.
 
@@ -106,7 +104,7 @@ The car requires more power to perform an on-axis spin. I found that it required
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/aC39HMUdOSA?si=NdtEi8UWbuPlttxQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Task 9 - Motor Calibration
+## Task 9 - Motor Calibration
 
 To see if both of my motors spin at the same rate, I decided to see if my robot could follow a straight line for at least 2m. 
 
@@ -120,7 +118,7 @@ This led me to empirically find a ratio between what duty cycle I should run one
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/kdm-MDQFwFc?si=XOMcGMSzjix8eU7H" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Task 10 - Run!
+## Task 10 - Run!
 
 Now, I decided to run my car untethered, to see how it performs doing basic turns and maneuvers using the following code:
 
@@ -142,7 +140,7 @@ Now, I decided to run my car untethered, to see how it performs doing basic turn
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/JNI7jOArJLk?si=u5TLUkC5C62oNDY_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Additional Tasks - 5190
+## Additional Tasks - 5190
 
 In order to measure the frequency that the analogWrite generates, I turn to the oscilloscope's output. The image shows that the signal has a period of about 5.464 ms, which equates to about 183 Hz. The frequency is the same for all duty cycles. 
 
@@ -162,6 +160,6 @@ Additionally, the lowest PWM signal for the robot to perform a one-axis turn on 
   <source src="/Fast-Robots/turned.mp4" type="video/mp4">
 </video>
 
-### References
+## References
 
 This lab required significant time in the lab for soldering, therefore for the majority of my questions I went to the TAs and Professor Farrell for help. Aside from this, I referened Aidan Derocher's course website from last year.
