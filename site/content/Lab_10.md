@@ -37,7 +37,7 @@ No, since it doesn't turn at exactly 90 degrees, overtime the error compounds an
 
 ## Closed Loop Control
 
-I now designed a simple closed loop controller that took in the distance rom the wall and radomly decides to turn left or right.
+I now designed a simple closed loop controller that took in the distance rom the wall and randomly decides to turn left or right.
 
 ```python
 import random
@@ -72,6 +72,6 @@ At 2 m/s, 0.3m was approximately the shortest distance that let the car successf
 
 ### Does your obstacle avoidance code always work? If not, what can you do to minimize crashes or (may be) prevent them completely?
 
-Previously, I changed the car's velocity and minimum distance from the wall to turn.However, even after finding the right values for this, the robot would still graze past the boundary/objects.
+Previously, I changed the car's velocity and minimum distance from the wall to turn. However, even after finding the right values for this, the robot would still graze past the boundary/objects.
 
 One of the best ways to fix this would be if the distance measurement was not just a straight line, but a cone such that the robot does not graze by obstacles that is not detected in its limited stright line of sight.
