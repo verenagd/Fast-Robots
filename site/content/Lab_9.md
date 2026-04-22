@@ -67,7 +67,11 @@ Once the error drops within 1 degree of the target, the car stops and ouputs: "W
 
 The robot paused between steps, which guarantees that the ToF sensor is pointing at a fixed point in space before logging data. My car was not perfect at completing on-axis turns due to motor asymmetry, which I corrected with a calibration factor applied to the left motor.
 
-Unfortunately I was unable to get my car to perfectly turn on-axis and there was an error of about 6 inches AAAAAAAAAAAAAAAAAAAAA
+Here is a snippet from one of the runs:
+
+<video src="/Fast-Robots/car_TURNING.mp4" controls width="600"></video>
+
+Unfortunately I was unable to get my car to perfectly turn on-axis and there was an error of about 3 inches around the perimeter of an empty 4x4 meter room.
 
 The plot below shows the yaw and ToF readings over time, and the motor PWM showing each of the 14 steps:
 
@@ -89,24 +93,28 @@ To convert the sensor readings from the robot's frame to the inertial world fram
 
   <figure style="flex: 1; min-width: 180px; margin: 0;">
     <img src="/Fast-Robots/Actual_Map.png" alt="A">
-    <figcaption>Roll and Pitch at 0 degrees</figcaption>
+    <figcaption>World</figcaption>
   </figure>
 
   <figure style="flex: 1; min-width: 180px; margin: 0;">
     <img src="/Fast-Robots/polar.png" alt="B">
-    <figcaption>Roll at 90 degrees</figcaption>
+    <figcaption>Polar Map of World from First Run</figcaption>
   </figure>
 
   <figure style="flex: 1; min-width: 180px; margin: 0;">
     <img src="/Fast-Robots/360_turn.png" alt="C">
-    <figcaption>Roll at -90 degrees</figcaption>
+    <figcaption>ToF Readings from First Run</figcaption>
   </figure>
 </div>
+
+## Task 4 - Taking Measurements from Mutiple Locations
+
+
 
 The full transformation from sensor frame to world frame is:
 
 $$
-T_{world} = T_{robot in world} \dot T_{sensor on robot}
+T_{world} = T_{robot in world}  T_{sensor on robot}
 $$
 
 Where
@@ -121,16 +129,16 @@ $$
 
 $$
 T_{sensor on robot}= \left[\begin{matrix}
-1 & 0 & d\\\\
-0 & 1 & 0\\\\
-0 & 0 & 1
+TOF\\\\
+0 \\\\
+0
 \end{matrix}\right]
 $$
 
-A ToF reading of distance `r` gives a point in the sensor frame of `(r,0,1)`. Applying the fully transformation gives:
+A ToF reading of distance `r` gives a point in the sensor frame of `(r,0,1)`. Applying the fulL transformation gives:
 
 $$
-p_{world} = T_{robot in world} \dot T_{sensor on robot} \dot [r,0,1]\^{T}
+p_{world} = T_{robot in world} \dot T_{sensor on robot} [r,0,1]\^{T}
 $$
 
 Which expands to:
