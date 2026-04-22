@@ -90,6 +90,24 @@ The polar plot shows a reasonable scan of the environment, with distances rangin
 
 To convert the sensor readings from the robot's frame to the inertial world frame, I used transformation matrices. The robot is placed at a known position `(x_0, y_0)` in the room, and at each measurement the sensor is pointing at angle `θ` (the yaw reading). The ToF sensor is mounted at the front of the robot, offset from the center of rotation by a distance `d` along the robot's x-axis.
 
+<div style="display: flex; gap: 16px; flex-wrap: wrap;">
+
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/Actual_Map.png" alt="A">
+    <figcaption>Roll and Pitch at 0 degrees</figcaption>
+  </figure>
+
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/polar.png" alt="B">
+    <figcaption>Roll at 90 degrees</figcaption>
+  </figure>
+
+  <figure style="flex: 1; min-width: 180px; margin: 0;">
+    <img src="/Fast-Robots/360_turn.png" alt="C">
+    <figcaption>Roll at -90 degrees</figcaption>
+  </figure>
+</div>
+
 The full transformation from sensor frame to world frame is:
 
 $$
