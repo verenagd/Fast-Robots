@@ -8,13 +8,6 @@ The goal of this lab is to map out a room or series of objects using the robot's
 
 ## Task 1
 
-Orientation control: Tune your PID orientation controller to allow your robot to do on-axis turns in small, accurate increments. If you choose this option, you can score up to 7.5 points in this lab.
-This option may also be best if you cannot get your robot to do slow reliable turns. Recall that the ToF sensor will report false outputs if the distance to the object changes too drastically during a reading – a stationary robot can guarantee that the ToF sensor is pointing towards a fixed point in space.
-Please quantify and/or use graphs to document that your PID controller works well, and upload a video that shows if your robot turns (roughly) on axis.
-Given any potential drift in your sensor, the size and accuracy of your increments, and how reliably your robot turns on axis, reason about the average and maximum error of your map if you were to do an on-axis turn in the middle of a 4x4m square, empty room.
-
-
-
 I decided to control my robot by repeatedly using PD control. On the Python side, I had the code loop through 14 steps of 25 degrees each, sending a new target angle after each step completed. 
 
 I start off by calling the SPIN case which initializes everything and takes in four values: proportional gain, derivative gain, motor calibration, and the target yaw angle:
@@ -68,23 +61,25 @@ pwm = (prop_gain * errorr) - (der_gain * derivative);
 float pwm_range = constrain(abs(pwm), 60, 90);
 ```
 
-I decided to force the robot to go CCW in some instances, such that it would take the long way and complete the entire circle. Additionally, I only used proportional and derivative control, as the integrator was a bit useless and I did not want to deal iwht integrator wind-up.
+I decided to force the robot to go CCW in some instances, such that it would take the long way and complete the entire circle.
 
 Once the error drops within 1 degree of the target, the car stops and ouputs: "Within target range."
 
 The robot paused between steps, which guarantees that the ToF sensor is pointing at a fixed point in space before logging data. My car was not perfect at completing on-axis turns due to motor asymmetry, which I corrected with a calibration factor applied to the left motor.
 
+Unfortunately I was unable to get my car to perfectly turn on-axis and there was an error of about 6 inches AAAAAAAAAAAAAAAAAAAAA
+
 The plot below shows the yaw and ToF readings over time, and the motor PWM showing each of the 14 steps:
 
-![360 turn](360_turn.png)
+<img src="/Fast-Robots/360_turn.png">
 
 ## Task 2 — Read Out Distances
 
 After each full 360° scan, the data was sent back over BLE using the `SEND_DATA` command and collected into a `messages` list. Each message contained the timestamp, ToF reading, yaw angle, and motor PWM. The polar plot below shows the scan:
 
-![polar scan](polar.png)
+<img src="/Fast-Robots/polar.png">
 
-The polar plot shows a reasonable scan of the environment, with distances ranging from roughly 250mm to 2000mm depending on direction.
+I did not have enough time to use the lab's map, so instead I mapped out the shown objects in a living space. The polar plot shows a reasonable scan of the environment. The farther distances refer to two walls that are beyond the scope of the camera (I did not wnat to count them into my map).
 
 ## Task 3 — Merge and Plot Readings
 
@@ -141,6 +136,6 @@ $$
 Which expands to:
 
 $$
-x_{world}= x_{0}+(r+d) + cos(\theta)
-y_{world}= y_{0}+(r+d) + sin(\theta)
+x_{world}= x_{0}+(r+d)cos(\theta)
+y_{world}= y_{0}+(r+d)sin(\theta)
 $$
