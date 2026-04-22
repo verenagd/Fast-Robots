@@ -88,6 +88,7 @@ $$
 $$
 
 2. Update
+
 $$
 bel(x_{t})= \eta \dot p(z_{t}|x_{t}) \dot \overline{bel}(x_{t}) 
 $$
