@@ -83,7 +83,7 @@ After each full 360° scan, the data was sent back over BLE using the `SEND_DATA
 
 <img src="/Fast-Robots/polar.png">
 
-I did not have enough time to use the lab's map, so instead I mapped out the shown objects in a living space. The polar plot shows a reasonable scan of the environment. The farther distances refer to two walls that are beyond the scope of the camera (I did not wnat to count them into my map).
+I did not have enough time to use the lab's map, so instead I mapped out the shown objects in a living space. The polar plot shows a reasonable scan of the environment.
 
 ## Task 3 — Merge and Plot Readings
 
@@ -135,15 +135,4 @@ TOF\\\\
 \end{matrix}\right]
 $$
 
-A ToF reading of distance `r` gives a point in the sensor frame of `(r,0,1)`. Applying the fulL transformation gives:
-
-$$
-p_{world} = T_{robot in world} \dot T_{sensor on robot} [r,0,1]\^{T}
-$$
-
-Which expands to:
-
-$$
-x_{world}= x_{0}+(r+d)cos(\theta)
-y_{world}= y_{0}+(r+d)sin(\theta)
-$$
+My ToF front sensor is located about 2.5" in front of the center of the car. 
