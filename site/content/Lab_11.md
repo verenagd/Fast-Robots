@@ -26,12 +26,11 @@ Since the output of the member function `perform_observation_loop()` needs to be
 for step in range(STEPS):
     target = target_for_step(step)
     idx = np.argmin(np.abs(yaws - target))
-    sensor_ranges.append(tofs[idx] / 1000.0)  # mm -> meters
+    sensor_ranges.append(tofs[idx] / 1000.0) 
     sensor_bearings.append(target)
     print(f"  target={target}°, actual={yaws[idx]}°, ToF={tofs[idx]}mm")
 
 ```
-
 
 <div style="display: flex; gap: 16px; flex-wrap: wrap;">
 
@@ -55,6 +54,12 @@ for step in range(STEPS):
     <figcaption>Position 4: 5 ft, 3 ft, 0 deg</figcaption>
   </figure>
 
-
-
 </div>
+
+The Bayes filter localized the robot poorly for position 1, as it is off by roughly 2' in x and 1.4' in y. This is in the lower-left region of the map, which is a relatively open and featureless area. The lack of nearby geometry, such as corners and obstacles makes it harder for the sensor model to uniquely identify the pose.
+
+For position 2, the x error is about 0.5' and the y is ~2'. This position is near the notch in the upper wall, which provides some directional cues, but the robot may have been localized to a region with similar wall distances in the y direction, causing the offset.
+
+Position 3 is the worst-performing position. The (5 ft, -3 ft) location is in the lower-right corner of the map, near the boundary a region where sensor readings may be ambiguous or where the ray-cast model has difficulty distinguishing it from other positions with similar wall profiles.
+
+The robot localized most accurately at Position 2 (0 ft, 3 ft), where the belief was within roughly half a foot in x. Localization was worst at Positions 3 and 4 on the right side of the map. This likely reflects the geometry of the environment: the left and upper portions of the map feature the distinctive L-shaped notch in the outer wall, which produces unique distance signatures across different headings. The right side of the map, by contrast, is a more open rectangular region, where many poses yield similar sets of ToF readings, making it harder for the update step alone to disambiguate the robot's location. In general, poses near corners or irregular wall features tend to localize better than those in open, symmetric spaces.
