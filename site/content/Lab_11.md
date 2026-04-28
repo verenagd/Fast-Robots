@@ -31,9 +31,12 @@ for step in range(STEPS):
     print(f"  target={target}°, actual={yaws[idx]}°, ToF={tofs[idx]}mm")
 
 ```
+The following is a timelapse of one of the runs. As you can see there is a bit of a drift, which potentially becomes a source of error in the model.
+
+<video src="/Fast-Robots/LAB11.mp4" controls width="600"></video>
+
 
 <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-
   <figure style="flex: 1; min-width: 180px; margin: 0;">
     <img src="/Fast-Robots/PLOT_NEG3_NEG2.png" alt="A">
     <figcaption>Position 1: -3 ft, -2 ft, 0 deg</figcaption>
@@ -53,7 +56,6 @@ for step in range(STEPS):
     <img src="/Fast-Robots/5_3.png" alt="C">
     <figcaption>Position 4: 5 ft, 3 ft, 0 deg</figcaption>
   </figure>
-
 </div>
 
 The Bayes filter localized the robot poorly for position 1, as it is off by roughly 2' in x and 1.4' in y. This is in the lower-left region of the map, which is a relatively open and featureless area. The lack of nearby geometry, such as corners and obstacles makes it harder for the sensor model to uniquely identify the pose.
@@ -63,3 +65,4 @@ For position 2, the x error is about 0.5' and the y is ~2'. This position is nea
 Position 3 is the worst-performing position. The (5 ft, -3 ft) location is in the lower-right corner of the map, near the boundary a region where sensor readings may be ambiguous or where the ray-cast model has difficulty distinguishing it from other positions with similar wall profiles.
 
 The robot localized most accurately at Position 2 (0 ft, 3 ft), where the belief was within roughly half a foot in x. Localization was worst at Positions 3 and 4 on the right side of the map. This likely reflects the geometry of the environment: the left and upper portions of the map feature the distinctive L-shaped notch in the outer wall, which produces unique distance signatures across different headings. The right side of the map, by contrast, is a more open rectangular region, where many poses yield similar sets of ToF readings, making it harder for the update step alone to disambiguate the robot's location. In general, poses near corners or irregular wall features tend to localize better than those in open, symmetric spaces.
+
