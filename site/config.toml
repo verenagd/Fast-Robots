@@ -37,7 +37,7 @@ links = [
   { url = "@/Lab_9.md", name = "Lab 9" },
   { url = "@/Lab_10.md", name = "Lab 10" },
   { url = "@/Lab_11.md", name = "Lab 11" },
-  { url = "@/Lab_11.md", name = "Lab 12" }
+  { url = "@/Lab_12.md", name = "Lab 12" }
   ] },
   { url = "@/about.md", name = "About" },
 
